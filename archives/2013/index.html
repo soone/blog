@@ -13,7 +13,7 @@
   <meta property="og:site_name" content="soone的碎碎念"/>
 
   <link href="/blog/favicon.png" rel="icon">
-  <link rel="alternate" href="/blog/atom.xml" title="soone的碎碎念" type="application/atom+xml">
+  <link rel="alternate" href="true" title="soone的碎碎念" type="application/atom+xml">
   <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
@@ -42,6 +42,58 @@
 
 
 <h2 class="archive-title">2013</h2>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-02-07T16:29:46.000Z"><a href="/blog/2013/02/08/about-nodejs-install-with-homebrew/">Feb 8 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/blog/2013/02/08/about-nodejs-install-with-homebrew/">关于用homebrew安装nodejs无法link的解决方法</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>为了使用hexo，装nodejs是必须的，索性我的mac已经装了homebrew这个包管理神器了，有了这个东西确实装起软件来方便很多。且看我如何用它装nodejs。</p>
+<p><em>其实只需要一步</em></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="title">brew</span> install nodejs</div></code></pre></td></tr></table></figure>
+
+<p><strong>且慢有状况</strong>，报了下面这样一个信息：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div></code></pre></td><td class="code"><pre><code><div class="line">Warning: Could <span class="keyword">not</span> link node. Unlinking...</div><div class="line">Error: The `<span class="javascript">brew link</span>` step did <span class="keyword">not</span> complete successfully</div><div class="line">The formula built, but <span class="keyword">is</span> <span class="keyword">not</span> symlinked into <span class="regexp">/usr/</span>local</div><div class="line">You can <span class="keyword">try</span> again using `<span class="javascript">brew link node<span class="string">'</span></div></code></pre></td></tr></table></figure>
+
+<p>这时候虽然安装完成了，但是你直接在终端执行node命令的时候，会出现以下的信息</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="literal">-</span><span class="comment">bash</span> <span class="comment">node</span> <span class="comment">command</span> <span class="comment">not</span> <span class="comment">found</div></code></pre></td></tr></table></figure>
+
+<p>然后仔细看刚才的错误提示，brew建议我们执行</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div></code></pre></td><td class="code"><pre><code><div class="line">brew <span class="keyword">link</span> node</div><div class="line"><span class="comment">#google了一下有建议执行这样命令的</span></div><div class="line">brew <span class="keyword">link</span> -f node</div></code></pre></td></tr></table></figure>
+
+<p>照做。。。然后是“外甥打灯笼--照旧”<br>google发现stackoverflow.com上有人有类似问题，在第二个答案找到了比较靠谱的解决方法，不过也不完美哦,</p>
+<notextile><blockquote><p>You need to remove the npm package manually.<br>first unlink node: brew link -n node<br>remove npm folder: rm -R /usr/local/Cellar/node/0.8.10/lib/node_modules/npm<br>link again: brew link node<br>there will be a soft link to the new location of npm  </p>
+<footer><strong><a href="http://stackoverflow.com/questions/12607155/error-the-brew-link-step-did-not-complete-successfully">http://stackoverflow.com/questions/12607155/error-the-brew-link-step-did-not-complete-successfully</a></strong></footer></blockquote></notextile>
+
+<p>第一条命令是删除link，然后第二条命令要求把这个目录下的东西，关键就在这里，如果/usr/local/Cellar/node/0.8.10/lib/node_modules/目录下有npm这个目录，第三条命令还是会执行失败，但是如果你执行了第二条，那么第三条虽然成功了npm却同样找不到，因为npm目录已经被删除了，所以解决方法是，第二条不要执行rm命令，而是使用mv把npm目录暂时先移走，然后执行第三条命令，成功后再把npm移回来，这样就都ok了。<br>最后一步就是做个软链到/usr/local/bin/npm下，这样整个问题就完美解决了<br>完整步骤如下：  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="title">brew</span> link -n node  </div><div class="line"><span class="title">mv</span> /usr/local/<span class="type">Cellar</span>/node/<span class="number">0.8</span><span class="number">.15</span>/lib/node_modules/npm ~/npm  </div><div class="line"><span class="title">brew</span> link node</div><div class="line"><span class="title">mv</span> ~/npm /usr/local/<span class="type">Cellar</span>/node/<span class="number">0.8</span><span class="number">.15</span>/lib/node_modules/npm  </div><div class="line"><span class="title">ln</span> -s /usr/local/<span class="type">Cellar</span>/node/<span class="number">0.8</span><span class="number">.15</span>/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm  </div></code></pre></td></tr></table></figure>
+
+<p>All Done. Enjoy That!!</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
 
 
   
@@ -93,11 +145,31 @@
 </div>
 
 
+<div class="widget tag">
+  <h3 class="title">Categories</h3>
+  <ul class="entry">
+  
+    <li><a href="/blog/categories/nodejs/mac/">mac</a><small>1</small></li>
+  
+    <li><a href="/blog/categories/nodejs/">nodejs</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
 
 
 <div class="widget tag">
   <h3 class="title">Tags</h3>
   <ul class="entry">
+  
+    <li><a href="/blog/tags/homebrew/">homebrew</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/mac/">mac</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/nodejs/">nodejs</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/npm/">npm</a><small>1</small></li>
   
     <li><a href="/blog/tags/随想/">随想</a><small>1</small></li>
   

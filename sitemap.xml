@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://thelastday.me/tools/index.html</loc>
+    <lastmod>2013-02-08T06:37:41.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://thelastday.me/2013/02/08/about-nodejs-install-with-homebrew/</loc>
+    <lastmod>2013-02-08T05:52:32.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://thelastday.me/README.html</loc>
+    <lastmod>2013-02-07T10:19:07.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://thelastday.me/2013/02/07/hello-hexo/</loc>
+    <lastmod>2013-02-07T10:13:57.000Z</lastmod>
+  </url>
+</urlset>
