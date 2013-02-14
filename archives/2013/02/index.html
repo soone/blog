@@ -51,6 +51,94 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2013-02-14T17:24:21.000Z"><a href="/blog/2013/02/15/linux-mount-dev/">Feb 15 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/blog/2013/02/15/linux-mount-dev/">linux下的硬件对应的设备号</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <ol>
+<li><strong>IDE硬盘</strong>  /dev/hd[a-d]（并行硬盘）  </li>
+<li><strong>SCSI硬盘</strong>  /dev/sd[a-p]（串行硬盘）  </li>
+<li><strong>U盘</strong>   /dev/sd[a-p]  </li>
+<li><strong>光驱</strong>  /dev/cdrom  </li>
+<li><strong>软驱</strong>  /dev/fd[0-1]  </li>
+<li><strong>打印机</strong>    /dev/ld[0-2]  </li>
+<li><strong>鼠标</strong>  /dev/mouse  </li>
+<li><strong>LCD</strong>   /dev/fb0  </li>
+<li><strong>系统终端</strong>  /dev/tty0</li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-02-14T09:48:56.000Z"><a href="/blog/2013/02/14/gentoo-install-xfce/">Feb 14 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/blog/2013/02/14/gentoo-install-xfce/">在gentoo上安装xfce遇到的一些问题</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>以前就听说过tilda，后来一直没有时间好好研究研究，那天在n4上的浏览器上看到的tilda浏览记录，就想想要不在gentoo上先尝试一把。<br>不过我的gentoo还没有装桌面，那就从装桌面开始。</p>
+<figure class="highlight"><figcaption><span>X服务器配置指南</span><a href="http://www.gentoo.org/doc/zh_cn/xorg-config.xml">link</a></figcaption><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="title">emerge</span> -pv xorg-server  </div><div class="line"><span class="title">emerge</span> xorg-server</div></code></pre></td></tr></table></figure>
+运行上面的安装命令，总是得到以下的问题显示
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div></code></pre></td><td class="code"><pre><code><div class="line">The following <span class="keyword">USE</span> changes are necessary <span class="keyword">to</span> proceed:  </div><div class="line">#required by x11-drivers/xf86-video-vmware-<span class="number">12.0</span><span class="number">.2</span>-r1, required by x11-base/xorg-drivers-<span class="number">1.13</span>[video_cards_vmware], required by x11-base/xorg-server-<span class="number">1.13</span><span class="number">.0</span>-r1[xorg], required by x11-drivers/xf86-video-glint-<span class="number">1.2</span><span class="number">.8</span>&gt;=x11-libs/libdrm-<span class="number">2.4</span><span class="number">.40</span> libkms  </div><div class="line">#required by x11-drivers/xf86-video-vmware-<span class="number">12.0</span><span class="number">.2</span>-r1, required by x11-base/xorg-drivers-<span class="number">1.13</span>[video_cards_vmware], required by x11-base/xorg-server-<span class="number">1.13</span><span class="number">.0</span>-r1[xorg], required by x11-drivers/xf86-video-glint-<span class="number">1.2</span><span class="number">.8</span> =media-libs/mesa-<span class="number">9.0</span> xa  </div><br><div class="line"> * IMPORTANT: <span class="number">6</span> news items need reading <span class="keyword">for</span> repository <span class="attribute">'gentoo</span>'.  </div><div class="line"> * <span class="keyword">Use</span> eselect news <span class="keyword">to</span> read news items.  </div></code></pre></td></tr></table></figure>
+看提示是需要安装libdrm和mesa，不过安装过后还是一样出现这个提示，从google大神那得到一个提示说是要先做以下操作:
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div></code></pre></td><td class="code"><pre><code><div class="line">cd /etc/init<span class="variable">.d</span>  </div><div class="line">ln -s net<span class="variable">.lo</span> net<span class="variable">.eth1</span>  </div><div class="line">rc-update add net<span class="variable">.eth1</span> <span class="keyword">default</span></div></code></pre></td></tr></table></figure>
+再运行上面装xorg的命令，可惜还是得到这样的提示
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="comment">The</span> <span class="comment">following</span> <span class="comment">USE</span> <span class="comment">changes</span> <span class="comment">are</span> <span class="comment">necessary</span> <span class="comment">to</span> <span class="comment">proceed:</span>  </div><div class="line"><span class="comment">#required</span> <span class="comment">by</span> <span class="comment">x11</span>-<span class="comment">drivers/xf86</span>-<span class="comment">video</span>-<span class="comment">vmware</span>-<span class="comment">12</span>.<span class="comment">0</span>.<span class="comment">2</span>-<span class="comment">r1</span>, <span class="comment">required</span> <span class="comment">by</span> <span class="comment">x11</span>-<span class="comment">base/xorg</span>-<span class="comment">drivers</span>-<span class="comment">1</span>.<span class="comment">13</span>[<span class="comment">video_cards_vmware</span>]<span class="string">,</span> <span class="comment">required</span> <span class="comment">by</span> <span class="comment">x11</span>-<span class="comment">base/xorg</span>-<span class="comment">server</span>-<span class="comment">1</span>.<span class="comment">13</span>.<span class="comment">0</span>-<span class="comment">r1</span>[<span class="comment">xorg</span>]<span class="string">,</span> <span class="comment">required</span> <span class="comment">by</span> <span class="comment">x11</span>-<span class="comment">drivers/xf86</span>-<span class="comment">video</span>-<span class="comment">glint</span>-<span class="comment">1</span>.<span class="comment">2</span>.<span class="comment">8</span>&gt;<span class="comment">=x11</span>-<span class="comment">libs/libdrm</span>-<span class="comment">2</span>.<span class="comment">4</span>.<span class="comment">40</span> <span class="comment">libkms</span>  </div><div class="line"><span class="comment">#required</span> <span class="comment">by</span> <span class="comment">x11</span>-<span class="comment">drivers/xf86</span>-<span class="comment">video</span>-<span class="comment">vmware</span>-<span class="comment">12</span>.<span class="comment">0</span>.<span class="comment">2</span>-<span class="comment">r1</span>, <span class="comment">required</span> <span class="comment">by</span> <span class="comment">x11</span>-<span class="comment">base/xorg</span>-<span class="comment">drivers</span>-<span class="comment">1</span>.<span class="comment">13</span>[<span class="comment">video_cards_vmware</span>]<span class="string">,</span> <span class="comment">required</span> <span class="comment">by</span> <span class="comment">x11</span>-<span class="comment">base/xorg</span>-<span class="comment">server</span>-<span class="comment">1</span>.<span class="comment">13</span>.<span class="comment">0</span>-<span class="comment">r1</span>[<span class="comment">xorg</span>]<span class="string">,</span> <span class="comment">required</span> <span class="comment">by</span> <span class="comment">x11</span>-<span class="comment">drivers/xf86</span>-<span class="comment">video</span>-<span class="comment">glint</span>-<span class="comment">1</span>.<span class="comment">2</span>.<span class="comment">8=media</span>-<span class="comment">libs/mesa</span>-<span class="comment">9</span>.<span class="comment">0</span> <span class="comment">xa</span>  </div><br><div class="line"><span class="comment">Use</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">autounmask</span>-<span class="comment">write</span> <span class="comment">to</span> <span class="comment">write</span> <span class="comment">changes</span> <span class="comment">to</span> <span class="comment">config</span> <span class="comment">files</span> <span class="comment">(honoring</span> <span class="comment">CONFIG_PROTECT)</span>.  </div></code></pre></td></tr></table></figure>
+不过这次最后的提示不一样了，说需要加--autounmask-write的参数去修改一些config文件。于是乎第三次运行以下命令
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="comment">emerge</span> <span class="comment">xorg</span>-<span class="comment">server</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">autounmask</span>-<span class="comment">write</div></code></pre></td></tr></table></figure>
+这回是另一个提示
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div></code></pre></td><td class="code"><pre><code><div class="line">The following USE changes are necessary <span class="keyword">to</span> proceed:  </div><div class="line"><span class="comment">#required by x11-drivers/xf86-video-vmware-12.0.2-r1, required by x11-base/xorg-drivers-1.13[video_cards_vmware], required by x11-base/xorg-server-1.13.0-r1[xorg], required by x11-drivers/xf86-video-glint-1.2.8&gt;=x11-libs/libdrm-2.4.40 libkms  </span></div><div class="line"><span class="comment">#required by x11-drivers/xf86-video-vmware-12.0.2-r1, required by x11-base/xorg-drivers-1.13[video_cards_vmware], required by x11-base/xorg-server-1.13.0-r1[xorg], required by x11-drivers/xf86-video-glint-1.2.8=media-libs/mesa-9.0 xa  </span></div><br><div class="line">Autounmask changes successfully written. Remember <span class="keyword">to</span> <span class="command">run</span> dispatch-conf.</div></code></pre></td></tr></table></figure>
+根据提示再运行
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="attribute">dispatch-conf</div></code></pre></td></tr></table></figure>
+按u选择使用新的文件替换，最后才可以正常的运行
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="comment">emerge</span> <span class="comment">xorg</span>-<span class="comment">server</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">autounmask</span>-<span class="comment">write</div></code></pre></td></tr></table></figure>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2013-02-07T16:29:46.000Z"><a href="/blog/2013/02/08/about-nodejs-install-with-homebrew/">Feb 8 2013</a></time>
       
       
@@ -149,6 +237,10 @@
   <h3 class="title">Categories</h3>
   <ul class="entry">
   
+    <li><a href="/blog/categories/gentoo/">gentoo</a><small>1</small></li>
+  
+    <li><a href="/blog/categories/linux/">linux</a><small>1</small></li>
+  
     <li><a href="/blog/categories/nodejs/mac/">mac</a><small>1</small></li>
   
     <li><a href="/blog/categories/nodejs/">nodejs</a><small>1</small></li>
@@ -163,13 +255,25 @@
   <h3 class="title">Tags</h3>
   <ul class="entry">
   
+    <li><a href="/blog/tags/emerge/">emerge</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/gentoo/">gentoo</a><small>1</small></li>
+  
     <li><a href="/blog/tags/homebrew/">homebrew</a><small>1</small></li>
   
+    <li><a href="/blog/tags/linux/">linux</a><small>1</small></li>
+  
     <li><a href="/blog/tags/mac/">mac</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/mount/">mount</a><small>1</small></li>
   
     <li><a href="/blog/tags/nodejs/">nodejs</a><small>1</small></li>
   
     <li><a href="/blog/tags/npm/">npm</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/tilda/">tilda</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/xfce/">xfce</a><small>1</small></li>
   
     <li><a href="/blog/tags/随想/">随想</a><small>1</small></li>
   
