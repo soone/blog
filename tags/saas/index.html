@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>linux | soone的碎碎念</title>
+  <title>saas | soone的碎碎念</title>
   <meta name="author" content="soone">
   
   
@@ -41,7 +41,7 @@
     <div id="main-col" class="alignleft"><div id="wrapper">
 
 
-<h2 class="archive-title category">linux</h2>
+<h2 class="archive-title tag">saas</h2>
 
 
   
@@ -51,27 +51,33 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-02-14T17:24:21.000Z"><a href="/blog/2013/02/15/linux-mount-dev/">Feb 15 2013</a></time>
+        <time datetime="2013-02-16T06:44:26.000Z"><a href="/blog/2013/02/16/saas-research/">Feb 16 2013</a></time>
       
       
   
-    <h1 class="title"><a href="/blog/2013/02/15/linux-mount-dev/">linux下的硬件对应的设备号</a></h1>
+    <h1 class="title"><a href="/blog/2013/02/16/saas-research/">saas架构初研究</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <ol>
-<li><strong>IDE硬盘</strong>  /dev/hd[a-d]（并行硬盘）  </li>
-<li><strong>SCSI硬盘</strong>  /dev/sd[a-p]（串行硬盘）  </li>
-<li><strong>U盘</strong>   /dev/sd[a-p]  </li>
-<li><strong>光驱</strong>  /dev/cdrom  </li>
-<li><strong>软驱</strong>  /dev/fd[0-1]  </li>
-<li><strong>打印机</strong>    /dev/ld[0-2]  </li>
-<li><strong>鼠标</strong>  /dev/mouse  </li>
-<li><strong>LCD</strong>   /dev/fb0  </li>
-<li><strong>系统终端</strong>  /dev/tty0</li>
+        <p><strong>关键词</strong>  </p>
+<ul>
+<li>多租户  <ol>
+<li>隔离性  </li>
+<li>安全性</li>
 </ol>
+</li>
+<li>可伸缩性  </li>
+<li>通过配置进行定制  <ol>
+<li>第0级（混乱）：每次新增一个客户，都会新增软件的一个实例。  </li>
+<li>第1级（受控的混乱）：所有客户都运行在软件的同一个版本上，而且任何的定制化都通过修改配置来实现。  </li>
+<li>第2级（多租户[multi-tenant]、高层建筑[Highrise]）：所有的客户都已经可以在软件的同一个版本上运行了，而且他们都在同一个“实例”上运行。  </li>
+<li>第3级（多租户， 扩建[Build-Out]）：此时你已经拥有了多租户、单一版本的软件模型。不过你还是可以通过硬件扩展（scale-out）的方式来进行扩充。  </li>
+<li>第4级（乌托邦）：如同第3级，除非你可以找出有效的方式，以在不同的“实例”上运行不同版本的软件。</li>
+</ol>
+</li>
+</ul>
 
       
     </div>

@@ -1,0 +1,208 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>python | soone的碎碎念</title>
+  <meta name="author" content="soone">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="soone的碎碎念"/>
+
+  <link href="/blog/favicon.png" rel="icon">
+  <link rel="alternate" href="true" title="soone的碎碎念" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/blog/">soone的碎碎念</a></h1>
+  <h2><a href="/blog/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+
+
+<h2 class="archive-title category">python</h2>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-02-17T16:39:12.000Z"><a href="/blog/2013/02/18/what-does-functools.wraps-do/">Feb 18 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/blog/2013/02/18/what-does-functools.wraps-do/">functools.wraps用来做什么(翻)</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>以前对functools.wraps总是没有好好的深入去了解，刚好看到stackoverflow上有这样一个<a href="http://stackoverflow.com/questions/308999/what-does-functools-wraps-do" title="what does functools.wraps do?">帖子</a>在解释，就翻译过来，当作笔记记录。  </p>
+<h2>问题：</h2>
+<p>在本站的另一个问题的评论里，有一些网友在说他们不确定functools.wraps是用来做什么的，于是我就单独在网站上问一下这个问题，这样在stackoverflower上就有对functools.wraps特性的一个记录了。  </p>
+<h2>第一个答案</h2>
+<p>当我们在用装饰器的时候，其实就是用一个函数替换另一个函数。换句话说，就是比如你有如下一个装饰器</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">logged</span><span class="params">(func)</span>:</span>  </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">with_logging</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">        <span class="keyword">print</span> func.__name__ + <span class="string">" are called"</span></div><div class="line">        <span class="keyword">return</span> func(*args, **kwargs)</div><div class="line">    <span class="keyword">return</span> with_logging</div></code></pre></td></tr></table></figure>
+接下去，把这个装饰器用在一个函数上
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="decorator">@logged</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""does some math"""</span></div><div class="line">    <span class="keyword">return</span> x + x * x</div></code></pre></td></tr></table></figure>
+上面的代码实际和下面的代码是一个效果
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""does some math"""</span></div><div class="line">    <span class="keyword">return</span> x + x * x</div><div class="line">f = logged(x)</div></code></pre></td></tr></table></figure>
+f这个函数被with_logging函数替换掉了。很不幸的，这样就意味着如果你执行下面的代码
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="title">print</span> f.__name__</div></code></pre></td></tr></table></figure>
+将打印<strong>with_logging</strong>，因为这个是新函数的名字。事实上如果你查看f函数的__doc__属性，那将返回空，因为with_logging并没有设置__doc__描述，所以在f函数上设置的那个__doc__描述内容将不再会出现了。如果你查看pydoc的结果，那你将看到的是*args和**kwargs而不再是x，因为现在整个函数就是with_logging而不是f了。<br>按照上面的使用方法，如果你使用一个装饰器，那就意味着你将丢失被装饰的函数的这些信息，这是个很严重的问题。而这就是为什么我们要使用functools.wraps的原因了。它将被装饰函数的函数名称、docstring、形参等拷贝到新的这个装饰器里。**wraps**本身就是个装饰器，下面的代码可以正确显示我们想要的。
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div><div class="line-number">15</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> wraps</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">logged</span><span class="params">(func)</span>:</span></div><div class="line">    <span class="decorator">@wraps(func)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">with_logging</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">        <span class="keyword">print</span> func.__name__ + <span class="string">" are called"</span></div><div class="line">        <span class="keyword">return</span> func(*args, **kwargs)</div><div class="line">    <span class="keyword">return</span> with_logging</div><br><div class="line"><span class="decorator">@logged</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""does same math"""</span></div><div class="line">    <span class="keyword">return</span> x + x * x</div><br><div class="line"><span class="keyword">print</span> f.__name__ <span class="comment"># 打印"f"</span></div><div class="line"><span class="keyword">print</span> f.__doc__ <span class="comment"># 打印"does same math"</span></div></code></pre></td></tr></table></figure>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+
+  <nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+<div class="search">
+  <form action="http://google.com/search" method="get" accept-charset="utf-8">
+    <input type="text" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:thelastday.me">
+  </form>
+</div>
+
+
+<div class="widget tag">
+  <h3 class="title">Categories</h3>
+  <ul class="entry">
+  
+    <li><a href="/blog/categories/gentoo/">gentoo</a><small>1</small></li>
+  
+    <li><a href="/blog/categories/linux/">linux</a><small>1</small></li>
+  
+    <li><a href="/blog/categories/nodejs/mac/">mac</a><small>1</small></li>
+  
+    <li><a href="/blog/categories/nodejs/">nodejs</a><small>1</small></li>
+  
+    <li><a href="/blog/categories/python/programming/">programming</a><small>1</small></li>
+  
+    <li><a href="/blog/categories/python/">python</a><small>1</small></li>
+  
+    <li><a href="/blog/categories/tech/">tech</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+
+
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/blog/tags/emerge/">emerge</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/functools/">functools</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/gentoo/">gentoo</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/homebrew/">homebrew</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/linux/">linux</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/mac/">mac</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/mount/">mount</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/nodejs/">nodejs</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/npm/">npm</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/python/">python</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/saas/">saas</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/tech/">tech</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/tilda/">tilda</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/xfce/">xfce</a><small>1</small></li>
+  
+    <li><a href="/blog/tags/随想/">随想</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 soone
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'thelastdaydotme';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

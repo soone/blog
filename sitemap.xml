@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://thelastday.me/2013/02/18/what-does-functools.wraps-do/</loc>
+    <lastmod>2013-02-17T17:15:02.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://thelastday.me/2013/02/16/saas-research/</loc>
+    <lastmod>2013-02-16T07:42:42.000Z</lastmod>
+  </url>
+  <url>
     <loc>http://thelastday.me/2013/02/15/linux-mount-dev/</loc>
     <lastmod>2013-02-14T17:43:48.000Z</lastmod>
   </url>

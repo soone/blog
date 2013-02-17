@@ -3,13 +3,63 @@
   <title><![CDATA[soone的碎碎念]]></title>
   <link href="http://thelastday.me/atom.xml" rel="self"/>
   <link href="http://thelastday.me"/>
-  <updated>2013-02-14T17:44:00.526Z</updated>
+  <updated>2013-02-17T17:15:30.649Z</updated>
   <id>http://thelastday.me/</id>
   <author>
     <name><![CDATA[soone]]></name>
     <email><![CDATA[fengyue15@gmail.com]]></email>
   </author>
   <generator uri="http://zespia.tw/hexo">Hexo</generator>
+  <entry>
+    <title type="html"><![CDATA[functools.wraps用来做什么(翻)]]></title>
+    <link href="http://thelastday.me/2013/02/18/what-does-functools.wraps-do/"/>
+    <id>http://thelastday.me/2013/02/18/what-does-functools.wraps-do/</id>
+    <published>2013-02-17T16:39:12.000Z</published>
+    <updated>2013-02-17T17:15:02.000Z</updated>
+    <content type="html"><![CDATA[<p>以前对functools.wraps总是没有好好的深入去了解，刚好看到stackoverflow上有这样一个<a href="http://stackoverflow.com/questions/308999/what-does-functools-wraps-do" title="what does functools.wraps do?">帖子</a>在解释，就翻译过来，当作笔记记录。  </p>
+<h2>问题：</h2>
+<p>在本站的另一个问题的评论里，有一些网友在说他们不确定functools.wraps是用来做什么的，于是我就单独在网站上问一下这个问题，这样在stackoverflower上就有对functools.wraps特性的一个记录了。  </p>
+<h2>第一个答案</h2>
+<p>当我们在用装饰器的时候，其实就是用一个函数替换另一个函数。换句话说，就是比如你有如下一个装饰器</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">logged</span><span class="params">(func)</span>:</span>  </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">with_logging</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">        <span class="keyword">print</span> func.__name__ + <span class="string">" are called"</span></div><div class="line">        <span class="keyword">return</span> func(*args, **kwargs)</div><div class="line">    <span class="keyword">return</span> with_logging</div></code></pre></td></tr></table></figure>
+接下去，把这个装饰器用在一个函数上
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="decorator">@logged</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""does some math"""</span></div><div class="line">    <span class="keyword">return</span> x + x * x</div></code></pre></td></tr></table></figure>
+上面的代码实际和下面的代码是一个效果
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""does some math"""</span></div><div class="line">    <span class="keyword">return</span> x + x * x</div><div class="line">f = logged(x)</div></code></pre></td></tr></table></figure>
+f这个函数被with_logging函数替换掉了。很不幸的，这样就意味着如果你执行下面的代码
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="title">print</span> f.__name__</div></code></pre></td></tr></table></figure>
+将打印<strong>with_logging</strong>，因为这个是新函数的名字。事实上如果你查看f函数的__doc__属性，那将返回空，因为with_logging并没有设置__doc__描述，所以在f函数上设置的那个__doc__描述内容将不再会出现了。如果你查看pydoc的结果，那你将看到的是*args和**kwargs而不再是x，因为现在整个函数就是with_logging而不是f了。<br>按照上面的使用方法，如果你使用一个装饰器，那就意味着你将丢失被装饰的函数的这些信息，这是个很严重的问题。而这就是为什么我们要使用functools.wraps的原因了。它将被装饰函数的函数名称、docstring、形参等拷贝到新的这个装饰器里。**wraps**本身就是个装饰器，下面的代码可以正确显示我们想要的。
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div><div class="line-number">15</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> wraps</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">logged</span><span class="params">(func)</span>:</span></div><div class="line">    <span class="decorator">@wraps(func)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">with_logging</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">        <span class="keyword">print</span> func.__name__ + <span class="string">" are called"</span></div><div class="line">        <span class="keyword">return</span> func(*args, **kwargs)</div><div class="line">    <span class="keyword">return</span> with_logging</div><br><div class="line"><span class="decorator">@logged</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""does same math"""</span></div><div class="line">    <span class="keyword">return</span> x + x * x</div><br><div class="line"><span class="keyword">print</span> f.__name__ <span class="comment"># 打印"f"</span></div><div class="line"><span class="keyword">print</span> f.__doc__ <span class="comment"># 打印"does same math"</span></div></code></pre></td></tr></table></figure>]]></content>
+    <category scheme="http://thelastday.me/tags/python/" term="python"/>
+    <category scheme="http://thelastday.me/tags/functools/" term="functools"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[saas架构初研究]]></title>
+    <link href="http://thelastday.me/2013/02/16/saas-research/"/>
+    <id>http://thelastday.me/2013/02/16/saas-research/</id>
+    <published>2013-02-16T06:44:26.000Z</published>
+    <updated>2013-02-16T07:42:42.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>关键词</strong>  </p>
+<ul>
+<li>多租户  <ol>
+<li>隔离性  </li>
+<li>安全性</li>
+</ol>
+</li>
+<li>可伸缩性  </li>
+<li>通过配置进行定制  <ol>
+<li>第0级（混乱）：每次新增一个客户，都会新增软件的一个实例。  </li>
+<li>第1级（受控的混乱）：所有客户都运行在软件的同一个版本上，而且任何的定制化都通过修改配置来实现。  </li>
+<li>第2级（多租户[multi-tenant]、高层建筑[Highrise]）：所有的客户都已经可以在软件的同一个版本上运行了，而且他们都在同一个“实例”上运行。  </li>
+<li>第3级（多租户， 扩建[Build-Out]）：此时你已经拥有了多租户、单一版本的软件模型。不过你还是可以通过硬件扩展（scale-out）的方式来进行扩充。  </li>
+<li>第4级（乌托邦）：如同第3级，除非你可以找出有效的方式，以在不同的“实例”上运行不同版本的软件。</li>
+</ol>
+</li>
+</ul>
+]]></content>
+    <category scheme="http://thelastday.me/tags/saas/" term="saas"/>
+    <category scheme="http://thelastday.me/tags/tech/" term="tech"/>
+  </entry>
   <entry>
     <title type="html"><![CDATA[linux下的硬件对应的设备号]]></title>
     <link href="http://thelastday.me/2013/02/15/linux-mount-dev/"/>
