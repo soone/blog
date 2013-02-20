@@ -3,7 +3,7 @@ date: 2013-02-20 22:05:22
 tags:
 - python
 - blinker
-cateorgies:
+categories:
 - python
 - programming
 ---
