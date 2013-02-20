@@ -51,6 +51,86 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2013-02-20T14:05:22.000Z"><a href="/2013/02/20/python-blinker-introduct/">Feb 20 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/02/20/python-blinker-introduct/">python之blinker模块简单介绍</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>本文纯粹翻译自<a href="http://discorporate.us/projects/Blinker">blinker</a>官网的1.1版本的<a href="http://discorporate.us/projects/Blinker/docs/1.1/signals.html">documentation</a><br>首先介绍下blinker模块的作用： blinker为python对象提供快速、简单的object-to-object和信号广播功能。  </p>
+<p>blinker的核心虽然很小但却提供了强大的功能：  </p>
+<ul>
+<li>全局命名的信号注册  </li>
+<li>匿名信号  </li>
+<li>自定义名称注册  </li>
+<li>永久或暂时的连接接收器  </li>
+<li>通过弱引用自动断开连接接收器  </li>
+<li>sending arbitrary data payloads(这句没看明白)  </li>
+<li>从信号接收器搜集返回值  </li>
+</ul>
+<h3><strong>信号</strong></h3>
+<h4><strong>通过命名信号解耦</strong></h4>
+<p>通过<strong>singal()</strong>进行信号命名:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="keyword">from</span> blinker <span class="keyword">import</span> signal</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>initialized = signal(<span class="string">'initialized'</span>)</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>initialized <span class="keyword">is</span> signal(<span class="string">'initialized'</span>)</div><div class="line"><span class="built_in">True</span></div></code></pre></td></tr></table></figure>
+每次调用<strong>signal(&#39;name&#39;)</strong>都将返回想通过的信号对象，它允许那些没有连接部分的代码(不同的模块、插件、任何东西)都能够在没有要求任何其他代码共享或制定导入的情况下使用这个相同的信号。<br>
+####<strong>订阅信号</strong><br>
+<strong>signal.connect()</strong>注册一个函数，该函数在每次这个信号被发送的时候被调用。注册函数总是会被传递到引起信号发送的改对象中。<br><figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div></code></pre></td><td class="code"><pre><code><div class="line">&gt;&gt;&gt; def subscriber(sender):</div><div class="line"><span class="keyword">...</span>     print(<span class="string">"Got a signal sent by %r"</span> % sender)</div><div class="line"><span class="keyword">...</span></div><div class="line">&gt;&gt;&gt; ready = signal(<span class="string">'ready'</span>)</div><div class="line">&gt;&gt;&gt; ready.connect(subscriber)</div><div class="line">&lt;<span class="keyword">function</span> subscriber at 0x...&gt;</div></code></pre></td></tr></table></figure>
+
+<h4><strong>信号发送</strong></h4>
+<p>代码产生的事件会通过<strong>Signal.sender()</strong>通知到所有已连接的接收器上。  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div><div class="line-number">15</div><div class="line-number">16</div><div class="line-number">17</div><div class="line-number">18</div></code></pre></td><td class="code"><pre><code><div class="line">&gt;&gt;&gt; class Processor:</div><div class="line"><span class="keyword">...</span>     def __init__(self, name):</div><div class="line"><span class="keyword">...</span>         self.name = name</div><div class="line"><span class="keyword">...</span> </div><div class="line"><span class="keyword">...</span>     def go(self):</div><div class="line"><span class="keyword">...</span>         ready = signal(<span class="string">"ready"</span>)</div><div class="line"><span class="keyword">...</span>         ready.send(self)</div><div class="line"><span class="keyword">...</span>         print(<span class="string">"Processing"</span>)</div><div class="line"><span class="keyword">...</span>         complete = signal(<span class="string">"complete"</span>)</div><div class="line"><span class="keyword">...</span>         complete.send(self)</div><div class="line"><span class="keyword">...</span> </div><div class="line"><span class="keyword">...</span>     def __repr__(self):</div><div class="line"><span class="keyword">...</span>         <span class="keyword">return</span> <span class="string">"&lt;Processor %s&gt;"</span> % self.name</div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; processor_a = Processor(<span class="string">'a'</span>)</div><div class="line">&gt;&gt;&gt; processor_a.go()</div><div class="line">Got a signal sent by &lt;Processor a&gt;</div><div class="line">Processing</div></code></pre></td></tr></table></figure>
+注意看complete这个信号虽然也在go()函数中，但并还没有连接上这个信号的接收器，在没有接收器的情况下调用<strong>send()</strong>不会发送任何通知并且这些没有发送操作将尽可能的被低廉的优化掉。（译者注：不是很明白）<br>
+####<strong>订阅制定的发送者</strong>
+
+当任何的发送者发送信号，信号连接时默认的那个接收器将被调用。<strong>Signal.connect()</strong>函数接受一个可选的参数表明订阅者对应的特定发送对象。<br><figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div></code></pre></td><td class="code"><pre><code><div class="line">&gt;&gt;&gt; def b_subscriber(sender):</div><div class="line"><span class="keyword">...</span>     print(<span class="string">"Caught signal from processor_b."</span>)</div><div class="line"><span class="keyword">...</span>     assert sender.name == <span class="string">'b'</span></div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; processor_b = Processor(<span class="string">'b'</span>)</div><div class="line">&gt;&gt;&gt; ready.connect(b_subscriber, sender=processor_b)</div></code></pre></td></tr></table></figure>
+这个函数只有当<strong>processor_b</strong>函数在发送的时候才会对ready订阅生效。<br><figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div></code></pre></td><td class="code"><pre><code><div class="line">&gt;&gt;&gt; processor_a.go()</div><div class="line">Got a signal sent by <span class="tag">&lt;<span class="title">Processor</span> <span class="attribute">a</span>&gt;</span></div><div class="line">Processing.</div><div class="line">&gt;&gt;&gt; processor_b.go()</div><div class="line">Got a signal sent by <span class="tag">&lt;<span class="title">Processor</span> <span class="attribute">b</span>&gt;</span></div><div class="line">Caught signal from processor_b</div><div class="line">Processing.</div></code></pre></td></tr></table></figure>
+
+<h4><strong>通过信号发送和接收数据</strong></h4>
+<p><strong>send()</strong>函数添加额外的关键词参数，这些参数将被传递到已连接的函数:  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div></code></pre></td><td class="code"><pre><code><div class="line">&gt;&gt;&gt; send_data = signal(<span class="string">"send-data"</span>)</div><div class="line">&gt;&gt;&gt; @send_data.connect</div><div class="line"><span class="keyword">...</span> def receive_data(sender, **kw):</div><div class="line"><span class="keyword">...</span>     print(<span class="string">"Caught signal from %r, data %r"</span> % (sender, kw))</div><div class="line"><span class="keyword">...</span>     <span class="keyword">return</span> <span class="string">"received!"</span></div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; result = send_data.send(<span class="string">"anonymous"</span>, abc=<span class="number">123</span>)</div><div class="line">Caught signal from <span class="string">"anonymous"</span>, data {<span class="string">'abc'</span>: <span class="number">123</span>}</div></code></pre></td></tr></table></figure>
+<strong>send()</strong>函数返回每个连接函数的(receiver function, return value)形式的列表。<br><figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div></code></pre></td><td class="code"><pre><code><div class="line">&gt;&gt;&gt; result</div><div class="line">[(&lt;<span class="function"><span class="keyword">function</span> <span class="title">receive_data</span> <span class="title">at</span> 0<span class="title">x</span>...&gt;, '<span class="title">received</span>!')</span>]</div></code></pre></td></tr></table></figure>
+
+<h4><strong>匿名信号</strong></h4>
+<p>信号并不一定要命名。<strong>Signal</strong>在每次调用构造的时候会生成一个唯一的信号。比如：上面Processor的另一种实现提供了processing信号最为类的属性。  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div><div class="line-number">15</div><div class="line-number">16</div></code></pre></td><td class="code"><pre><code><div class="line">&gt;&gt;&gt; from blinker import Signal</div><div class="line">&gt;&gt;&gt; class AltProcessor:</div><div class="line"><span class="keyword">...</span>     on_ready = Signal()</div><div class="line"><span class="keyword">...</span>     on_complete = Signal()</div><div class="line"><span class="keyword">...</span> </div><div class="line"><span class="keyword">...</span>     def __init__(self, name):</div><div class="line"><span class="keyword">...</span>         self.name = name</div><div class="line"><span class="keyword">...</span> </div><div class="line"><span class="keyword">...</span>     def go(self):</div><div class="line"><span class="keyword">...</span>         self.on_ready.send(self)</div><div class="line"><span class="keyword">...</span>         print(<span class="string">"Alternate processing."</span>)</div><div class="line"><span class="keyword">...</span>         self.on_complete.send(self)</div><div class="line"><span class="keyword">...</span> </div><div class="line"><span class="keyword">...</span>     def __repr__(self):</div><div class="line"><span class="keyword">...</span>         <span class="keyword">return</span> <span class="string">"&lt;AltProcessor %s&gt;"</span> % self.name</div><div class="line"><span class="keyword">...</span> </div></code></pre></td></tr></table></figure>
+
+<h4><strong>连接作为装饰器</strong></h4>
+<p>将上面的代码在终端执行输出后，你可能已经注意到了<strong>connect()</strong>的返回值了。<strong>connect()</strong>被允许用来做位函数的装饰器。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div></code></pre></td><td class="code"><pre><code><div class="line">&gt;&gt;&gt; apc = AltProcessor(<span class="string">'c'</span>)</div><div class="line">&gt;&gt;&gt; @apc.on_complete.connect</div><div class="line"><span class="keyword">...</span> def completed(sender):</div><div class="line"><span class="keyword">...</span>     print <span class="string">"AltProcessor %s completed!"</span> % sender.name</div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; apc.go()</div><div class="line">Alternate processing.</div><div class="line">AltProcessor c completed!</div></code></pre></td></tr></table></figure>
+不行的是，这种形式虽然方便，但它不允许发送者或者弱参数为连接函数进行自定义。针对这点，可以用<strong>connect_via()</strong>函数。<br><figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div></code></pre></td><td class="code"><pre><code><div class="line">&gt;&gt;&gt; dice_roll = signal(<span class="string">'dice_roll'</span>)</div><div class="line">&gt;&gt;&gt; @dice_roll.connect_via(<span class="number">1</span>)</div><div class="line"><span class="keyword">...</span> @dice_roll.connect_via(<span class="number">3</span>)</div><div class="line"><span class="keyword">...</span> @dice_roll.connect_via(<span class="number">5</span>)</div><div class="line"><span class="keyword">...</span> def odd_subscriber(sender):</div><div class="line"><span class="keyword">...</span>     print(<span class="string">"Observed dice roll %r."</span> % sender)</div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; result = dice_roll.send(<span class="number">3</span>)</div><div class="line">Observed dice roll <span class="number">3</span></div></code></pre></td></tr></table></figure>
+
+<h4><strong>优化信号发送</strong></h4>
+<p>不管接受者有没有连接，信号总是被优化得发送非常快。如果要发送的信号非常昂贵，它会通过接收器的属性来更有效的检验是否有接收器连接。  </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="prompt">&gt;&gt;&gt; </span>bool(signal(<span class="string">'ready'</span>).receivers)</div><div class="line"><span class="built_in">True</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>bool(signal(<span class="string">'complete'</span>).receivers)</div><div class="line"><span class="built_in">False</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>bool(AltProcessor.on_complete.receivers)</div><div class="line"><span class="built_in">True</span></div></code></pre></td></tr></table></figure>
+检查一个接收器监听的特定的发件人也是可能的。<br><figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="prompt">&gt;&gt;&gt; </span>signal(<span class="string">'ready'</span>).has_receivers_for(processor_a)</div><div class="line"><span class="built_in">True</span></div></code></pre></td></tr></table></figure>
+
+<h4><strong>信号的文档块</strong></h4>
+<p>不管是不是匿名信号，都可以传递一个doc参数去为信号设置pydoc帮助文档。这个帮助文档将会被大多数的文档生成起所检出，对将被发送的信号的参数进行文档注释是很好的方式。<br>具体例子可以查看<strong><a href="http://discorporate.us/projects/Blinker/docs/1.1/api.html#blinker.base.receiver_connected">receiver_connected</a></strong>函数的文档。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2013-02-17T16:39:12.000Z"><a href="/2013/02/18/what-does-functools.wraps-do/">Feb 18 2013</a></time>
       
       
@@ -117,9 +197,9 @@ f这个函数被with_logging函数替换掉了。很不幸的，这样就意味�
   
     <li><a href="/categories/nodejs/">nodejs</a><small>1</small></li>
   
-    <li><a href="/categories/python/programming/">programming</a><small>1</small></li>
+    <li><a href="/categories/python/programming/">programming</a><small>2</small></li>
   
-    <li><a href="/categories/python/">python</a><small>1</small></li>
+    <li><a href="/categories/python/">python</a><small>2</small></li>
   
     <li><a href="/categories/tech/">tech</a><small>1</small></li>
   
