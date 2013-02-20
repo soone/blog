@@ -3,13 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>python | soone的碎碎念</title>
+  <title>python之blinker模块简单介绍 | soone的碎碎念</title>
   <meta name="author" content="soone">
+  
+  <meta name="description" content="本文纯粹翻译自blinker官网的1.1版本的documentation首先介绍下blinker模块的作用： blinker为python对象提供快速、简单的object-to-object和信号广播功能。  
+blinker的核心虽然很小但却提供了强大的功能：  
+
+全局命名的信号注册  
+匿名信">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="python之blinker模块简单介绍"/>
   <meta property="og:site_name" content="soone的碎碎念"/>
 
   <link href="/favicon.png" rel="icon">
@@ -40,12 +46,7 @@
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
 
-
-<h2 class="archive-title tag">python</h2>
-
-
-  
-    <article class="post">
+<article class="post">
   
   <div class="post-content">
     <header>
@@ -55,7 +56,7 @@
       
       
   
-    <h1 class="title"><a href="/2013/02/20/python-blinker-introduct/">python之blinker模块简单介绍</a></h1>
+    <h1 class="title">python之blinker模块简单介绍</h1>
   
 
     </header>
@@ -117,49 +118,11 @@
       
         
         
-      
-      <div class="clearfix"></div>
-    </footer>
+  
+  <div class="tags">
+    <a href="/tags/python/">python</a>, <a href="/tags/blinker/">blinker</a>
   </div>
-</article>
 
-
-  
-    <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2013-02-17T16:39:12.000Z"><a href="/2013/02/18/what-does-functools.wraps-do/">Feb 18 2013</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2013/02/18/what-does-functools.wraps-do/">functools.wraps用来做什么(翻)</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>以前对functools.wraps总是没有好好的深入去了解，刚好看到stackoverflow上有这样一个<a href="http://stackoverflow.com/questions/308999/what-does-functools-wraps-do" title="what does functools.wraps do?">帖子</a>在解释，就翻译过来，当作笔记记录。  </p>
-<h2>问题：</h2>
-<p>在本站的另一个问题的评论里，有一些网友在说他们不确定functools.wraps是用来做什么的，于是我就单独在网站上问一下这个问题，这样在stackoverflower上就有对functools.wraps特性的一个记录了。  </p>
-<h2>第一个答案</h2>
-<p>当我们在用装饰器的时候，其实就是用一个函数替换另一个函数。换句话说，就是比如你有如下一个装饰器</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">logged</span><span class="params">(func)</span>:</span>  </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">with_logging</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">        <span class="keyword">print</span> func.__name__ + <span class="string">" are called"</span></div><div class="line">        <span class="keyword">return</span> func(*args, **kwargs)</div><div class="line">    <span class="keyword">return</span> with_logging</div></code></pre></td></tr></table></figure>
-接下去，把这个装饰器用在一个函数上
-<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="decorator">@logged</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""does some math"""</span></div><div class="line">    <span class="keyword">return</span> x + x * x</div></code></pre></td></tr></table></figure>
-上面的代码实际和下面的代码是一个效果
-<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""does some math"""</span></div><div class="line">    <span class="keyword">return</span> x + x * x</div><div class="line">f = logged(x)</div></code></pre></td></tr></table></figure>
-f这个函数被with_logging函数替换掉了。很不幸的，这样就意味着如果你执行下面的代码
-<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="title">print</span> f.__name__</div></code></pre></td></tr></table></figure>
-将打印<strong>with_logging</strong>，因为这个是新函数的名字。事实上如果你查看f函数的__doc__属性，那将返回空，因为with_logging并没有设置__doc__描述，所以在f函数上设置的那个__doc__描述内容将不再会出现了。如果你查看pydoc的结果，那你将看到的是*args和**kwargs而不再是x，因为现在整个函数就是with_logging而不是f了。<br>按照上面的使用方法，如果你使用一个装饰器，那就意味着你将丢失被装饰的函数的这些信息，这是个很严重的问题。而这就是为什么我们要使用functools.wraps的原因了。它将被装饰函数的函数名称、docstring、形参等拷贝到新的这个装饰器里。**wraps**本身就是个装饰器，下面的代码可以正确显示我们想要的。
-<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div><div class="line-number">15</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> wraps</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">logged</span><span class="params">(func)</span>:</span></div><div class="line">    <span class="decorator">@wraps(func)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">with_logging</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">        <span class="keyword">print</span> func.__name__ + <span class="string">" are called"</span></div><div class="line">        <span class="keyword">return</span> func(*args, **kwargs)</div><div class="line">    <span class="keyword">return</span> with_logging</div><br><div class="line"><span class="decorator">@logged</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""does same math"""</span></div><div class="line">    <span class="keyword">return</span> x + x * x</div><br><div class="line"><span class="keyword">print</span> f.__name__ <span class="comment"># 打印"f"</span></div><div class="line"><span class="keyword">print</span> f.__doc__ <span class="comment"># 打印"does same math"</span></div></code></pre></td></tr></table></figure>
-      
-    </div>
-    <footer>
-      
-        
         
       
       <div class="clearfix"></div>
@@ -168,13 +131,12 @@ f这个函数被with_logging函数替换掉了。很不幸的，这样就意味�
 </article>
 
 
-  
-
-  <nav id="pagination">
-  
-  
-  <div class="clearfix"></div>
-</nav>
+<section id="comment">
+  <h1 class="title">Comments</h1>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
 </div></div>
     <aside id="sidebar" class="alignright">
 <div class="search">
@@ -271,7 +233,7 @@ var disqus_shortname = 'thelastdaydotme';
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
   dsq.async = true;
-  dsq.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
