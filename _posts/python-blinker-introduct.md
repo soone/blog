@@ -1,4 +1,4 @@
-title: python之blinker模块简单介绍
+title: python之blinker模块简单介绍(翻)
 date: 2013-02-20 22:05:22
 tags:
 - python
