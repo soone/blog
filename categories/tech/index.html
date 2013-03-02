@@ -51,6 +51,40 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2013-03-02T09:15:25.000Z"><a href="/2013/03/02/vim-tips-to-share-1/">Mar 2 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/03/02/vim-tips-to-share-1/">vim在多行前面或者后面增加字符</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>如何统一在多个行的前面增加字符或者增加字符串呢？在这里有几个技巧可以实现。<br>对于要在多行前面统一增加字符或者字符串的，如果行首都是对齐的，那我们很容易的可以直接使用VISUAL模式即列编辑模式，直接选中要修改的行，然后按I(大写的I)，接着输入我们想输入的字符或者字符串，按ESC，bingo!!!问题解决。<br>如果对于多行行首并不对齐的情况，如果我们想在每行的起始字符前面增加字符或者字符串，那就得使用替换了。比如我们要在14到30行每行的行首字符前面增加一个hello world的字符串，那就用如下命令解决：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="preprocessor">#如果是全文增加，只要把14,30替换成%字符就可以了  </span></div><div class="line"><span class="number">14</span>,<span class="number">30</span>s/\w/hello\ world/  </div><div class="line"><span class="preprocessor">#行首对齐的其实也可以用这个方式解决，比如：  </span></div><div class="line"><span class="number">14</span>,<span class="number">30</span>s/^/hello\ world/</div></code></pre></td></tr></table></figure>
+如果要在行尾进行字符或者字符串增加，聪明的读者应该发现，上面的方法稍微变化一下就可以实现
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="number">14</span>,<span class="number">30</span>s/<span class="variable">$/</span>hello\ world/</div></code></pre></td></tr></table></figure>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2013-02-16T06:44:26.000Z"><a href="/2013/02/16/saas-research/">Feb 16 2013</a></time>
       
       
@@ -149,7 +183,7 @@
   
     <li><a href="/categories/python/">python</a><small>2</small></li>
   
-    <li><a href="/categories/tech/">tech</a><small>1</small></li>
+    <li><a href="/categories/tech/">tech</a><small>2</small></li>
   
   </ul>
 </div>
@@ -163,6 +197,8 @@
   
     <li><a href="/tags/blinker/">blinker</a><small>1</small></li>
   
+    <li><a href="/tags/brew/">brew</a><small>1</small></li>
+  
     <li><a href="/tags/emerge/">emerge</a><small>1</small></li>
   
     <li><a href="/tags/functools/">functools</a><small>1</small></li>
@@ -173,9 +209,11 @@
   
     <li><a href="/tags/linux/">linux</a><small>1</small></li>
   
-    <li><a href="/tags/mac/">mac</a><small>1</small></li>
+    <li><a href="/tags/mac/">mac</a><small>3</small></li>
   
     <li><a href="/tags/mount/">mount</a><small>1</small></li>
+  
+    <li><a href="/tags/mysql/">mysql</a><small>1</small></li>
   
     <li><a href="/tags/nodejs/">nodejs</a><small>1</small></li>
   
@@ -188,6 +226,8 @@
     <li><a href="/tags/tech/">tech</a><small>1</small></li>
   
     <li><a href="/tags/tilda/">tilda</a><small>1</small></li>
+  
+    <li><a href="/tags/vim/">vim</a><small>1</small></li>
   
     <li><a href="/tags/xfce/">xfce</a><small>1</small></li>
   

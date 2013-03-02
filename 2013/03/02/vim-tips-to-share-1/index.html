@@ -3,13 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>mount | soone的碎碎念</title>
+  <title>vim在多行前面或者后面增加字符 | soone的碎碎念</title>
   <meta name="author" content="soone">
+  
+  <meta name="description" content="如何统一在多个行的前面增加字符或者增加字符串呢？在这里有几个技巧可以实现。对于要在多行前面统一增加字符或者字符串的，如果行首都是对齐的，那我们很容易的可以直接使用VISUAL模式即列编辑模式，直接选中要修改的行，然后按I(大写的I)，接着输入我们想输入的字符或者字符串，按ESC，bingo!!!问题">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="vim在多行前面或者后面增加字符"/>
   <meta property="og:site_name" content="soone的碎碎念"/>
 
   <link href="/favicon.png" rel="icon">
@@ -40,44 +42,42 @@
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
 
-
-<h2 class="archive-title tag">mount</h2>
-
-
-  
-    <article class="post">
+<article class="post">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-02-14T17:24:21.000Z"><a href="/2013/02/15/linux-mount-dev/">Feb 15 2013</a></time>
+        <time datetime="2013-03-02T09:15:25.000Z"><a href="/2013/03/02/vim-tips-to-share-1/">Mar 2 2013</a></time>
       
       
   
-    <h1 class="title"><a href="/2013/02/15/linux-mount-dev/">linux下的硬件对应的设备号</a></h1>
+    <h1 class="title">vim在多行前面或者后面增加字符</h1>
   
 
     </header>
     <div class="entry">
       
-        <ol>
-<li><strong>IDE硬盘</strong>  /dev/hd[a-d]（并行硬盘）  </li>
-<li><strong>SCSI硬盘</strong>  /dev/sd[a-p]（串行硬盘）  </li>
-<li><strong>U盘</strong>   /dev/sd[a-p]  </li>
-<li><strong>光驱</strong>  /dev/cdrom  </li>
-<li><strong>软驱</strong>  /dev/fd[0-1]  </li>
-<li><strong>打印机</strong>    /dev/ld[0-2]  </li>
-<li><strong>鼠标</strong>  /dev/mouse  </li>
-<li><strong>LCD</strong>   /dev/fb0  </li>
-<li><strong>系统终端</strong>  /dev/tty0</li>
-</ol>
-
+        <p>如何统一在多个行的前面增加字符或者增加字符串呢？在这里有几个技巧可以实现。<br>对于要在多行前面统一增加字符或者字符串的，如果行首都是对齐的，那我们很容易的可以直接使用VISUAL模式即列编辑模式，直接选中要修改的行，然后按I(大写的I)，接着输入我们想输入的字符或者字符串，按ESC，bingo!!!问题解决。<br>如果对于多行行首并不对齐的情况，如果我们想在每行的起始字符前面增加字符或者字符串，那就得使用替换了。比如我们要在14到30行每行的行首字符前面增加一个hello world的字符串，那就用如下命令解决：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="preprocessor">#如果是全文增加，只要把14,30替换成%字符就可以了  </span></div><div class="line"><span class="number">14</span>,<span class="number">30</span>s/\w/hello\ world/  </div><div class="line"><span class="preprocessor">#行首对齐的其实也可以用这个方式解决，比如：  </span></div><div class="line"><span class="number">14</span>,<span class="number">30</span>s/^/hello\ world/</div></code></pre></td></tr></table></figure>
+如果要在行尾进行字符或者字符串增加，聪明的读者应该发现，上面的方法稍微变化一下就可以实现
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="number">14</span>,<span class="number">30</span>s/<span class="variable">$/</span>hello\ world/</div></code></pre></td></tr></table></figure>
       
     </div>
     <footer>
       
         
+  
+  <div class="categories">
+    <a href="/categories/tech/">tech</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/vim/">vim</a>, <a href="/tags/mac/">mac</a>
+  </div>
+
         
       
       <div class="clearfix"></div>
@@ -86,13 +86,12 @@
 </article>
 
 
-  
-
-  <nav id="pagination">
-  
-  
-  <div class="clearfix"></div>
-</nav>
+<section id="comment">
+  <h1 class="title">Comments</h1>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
 </div></div>
     <aside id="sidebar" class="alignright">
 <div class="search">
@@ -195,7 +194,7 @@ var disqus_shortname = 'thelastdaydotme';
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
   dsq.async = true;
-  dsq.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>

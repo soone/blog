@@ -3,13 +3,41 @@
   <title><![CDATA[soone的碎碎念]]></title>
   <link href="http://thelastday.me/atom.xml" rel="self"/>
   <link href="http://thelastday.me"/>
-  <updated>2013-02-20T16:28:01.155Z</updated>
+  <updated>2013-03-02T09:31:54.559Z</updated>
   <id>http://thelastday.me/</id>
   <author>
     <name><![CDATA[soone]]></name>
     <email><![CDATA[fengyue15@gmail.com]]></email>
   </author>
   <generator uri="http://zespia.tw/hexo">Hexo</generator>
+  <entry>
+    <title type="html"><![CDATA[vim在多行前面或者后面增加字符]]></title>
+    <link href="http://thelastday.me/2013/03/02/vim-tips-to-share-1/"/>
+    <id>http://thelastday.me/2013/03/02/vim-tips-to-share-1/</id>
+    <published>2013-03-02T09:15:25.000Z</published>
+    <updated>2013-03-02T09:31:10.000Z</updated>
+    <content type="html"><![CDATA[<p>如何统一在多个行的前面增加字符或者增加字符串呢？在这里有几个技巧可以实现。<br>对于要在多行前面统一增加字符或者字符串的，如果行首都是对齐的，那我们很容易的可以直接使用VISUAL模式即列编辑模式，直接选中要修改的行，然后按I(大写的I)，接着输入我们想输入的字符或者字符串，按ESC，bingo!!!问题解决。<br>如果对于多行行首并不对齐的情况，如果我们想在每行的起始字符前面增加字符或者字符串，那就得使用替换了。比如我们要在14到30行每行的行首字符前面增加一个hello world的字符串，那就用如下命令解决：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="preprocessor">#如果是全文增加，只要把14,30替换成%字符就可以了  </span></div><div class="line"><span class="number">14</span>,<span class="number">30</span>s/\w/hello\ world/  </div><div class="line"><span class="preprocessor">#行首对齐的其实也可以用这个方式解决，比如：  </span></div><div class="line"><span class="number">14</span>,<span class="number">30</span>s/^/hello\ world/</div></code></pre></td></tr></table></figure>
+如果要在行尾进行字符或者字符串增加，聪明的读者应该发现，上面的方法稍微变化一下就可以实现
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="number">14</span>,<span class="number">30</span>s/<span class="variable">$/</span>hello\ world/</div></code></pre></td></tr></table></figure>]]></content>
+    <category scheme="http://thelastday.me/tags/vim/" term="vim"/>
+    <category scheme="http://thelastday.me/tags/mac/" term="mac"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[mac下使用brew安装mysql后无法启动]]></title>
+    <link href="http://thelastday.me/2013/03/02/mac-brew-install-mysql-cannt-start/"/>
+    <id>http://thelastday.me/2013/03/02/mac-brew-install-mysql-cannt-start/</id>
+    <published>2013-03-02T08:59:58.000Z</published>
+    <updated>2013-03-02T09:31:33.000Z</updated>
+    <content type="html"><![CDATA[<p>brew是mac下软件包管理的神器，一直用brew很方便的安装各种软件。最近偷懒想用brew安装下mysql。不料安装完成后遇到了启动不了的情况。错误日志记录如下：  </p>
+<p><notextile><blockquote><p>130227  9:46:12 [Warning] Setting lower_case_table_names=2 because file system for /usr/local/var/mysql/ is case insensitive<br>/usr/local/Cellar/mysql/5.5.28/bin/mysqld: Can&#39;t find file: &#39;./mysql/plugin.frm&#39; (errno: 13)<br>130227  9:46:12 [ERROR] Can&#39;t open the mysql.plugin table. Please run mysql_upgrade to create it.<br>130227  9:46:12 InnoDB: The InnoDB memory heap is disabled<br>130227  9:46:12 InnoDB: Mutexes and rw_locks use GCC atomic builtins<br>130227  9:46:12 InnoDB: Compressed tables use zlib 1.2.5<br>130227  9:46:12 InnoDB: Initializing buffer pool, size = 128.0M<br>130227  9:46:12 InnoDB: Completed initialization of buffer pool<br>130227  9:46:12  InnoDB: Operating system error number 13 in a file operation.<br><strong>InnoDB: The error means mysqld does not have the access rights to</strong><br>InnoDB: the directory.<br>InnoDB: File name ./ibdata1<br>InnoDB: File operation call: &#39;create&#39;.<br>InnoDB: Cannot continue operation.<br>130227 09:46:12 mysqld_safe mysqld from pid file /usr/local/var/mysql/soonemac.local.pid ended  </p></p>
+<p><footer></footer></blockquote></notextile>
+标粗那行表明有权限问题，进去看了下发现错误日志的用户是属于mysql的，其他的所有mysql相关文件的都是属于soone用户的。于是我干脆就把mysql相关的文件的权限改成了777，再次启动mysql，这回就正常了。<br>ps:理论上把跟mysql相关的文件和目录所属用户改成mysql应该也是能解决这个问题。</p>
+]]></content>
+    <category scheme="http://thelastday.me/tags/mac/" term="mac"/>
+    <category scheme="http://thelastday.me/tags/mysql/" term="mysql"/>
+    <category scheme="http://thelastday.me/tags/brew/" term="brew"/>
+  </entry>
   <entry>
     <title type="html"><![CDATA[python之blinker模块简单介绍(翻)]]></title>
     <link href="http://thelastday.me/2013/02/20/python-blinker-introduct/"/>

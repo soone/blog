@@ -3,13 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>mount | soone的碎碎念</title>
+  <title>mac下使用brew安装mysql后无法启动 | soone的碎碎念</title>
   <meta name="author" content="soone">
+  
+  <meta name="description" content="brew是mac下软件包管理的神器，一直用brew很方便的安装各种软件。最近偷懒想用brew安装下mysql。不料安装完成后遇到了启动不了的情况。错误日志记录如下：  
+130227  9:46:12 [Warning] Setting lower_case_table_names=2 becaus">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="mac下使用brew安装mysql后无法启动"/>
   <meta property="og:site_name" content="soone的碎碎念"/>
 
   <link href="/favicon.png" rel="icon">
@@ -40,44 +43,38 @@
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
 
-
-<h2 class="archive-title tag">mount</h2>
-
-
-  
-    <article class="post">
+<article class="post">
   
   <div class="post-content">
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-02-14T17:24:21.000Z"><a href="/2013/02/15/linux-mount-dev/">Feb 15 2013</a></time>
+        <time datetime="2013-03-02T08:59:58.000Z"><a href="/2013/03/02/mac-brew-install-mysql-cannt-start/">Mar 2 2013</a></time>
       
       
   
-    <h1 class="title"><a href="/2013/02/15/linux-mount-dev/">linux下的硬件对应的设备号</a></h1>
+    <h1 class="title">mac下使用brew安装mysql后无法启动</h1>
   
 
     </header>
     <div class="entry">
       
-        <ol>
-<li><strong>IDE硬盘</strong>  /dev/hd[a-d]（并行硬盘）  </li>
-<li><strong>SCSI硬盘</strong>  /dev/sd[a-p]（串行硬盘）  </li>
-<li><strong>U盘</strong>   /dev/sd[a-p]  </li>
-<li><strong>光驱</strong>  /dev/cdrom  </li>
-<li><strong>软驱</strong>  /dev/fd[0-1]  </li>
-<li><strong>打印机</strong>    /dev/ld[0-2]  </li>
-<li><strong>鼠标</strong>  /dev/mouse  </li>
-<li><strong>LCD</strong>   /dev/fb0  </li>
-<li><strong>系统终端</strong>  /dev/tty0</li>
-</ol>
+        <p>brew是mac下软件包管理的神器，一直用brew很方便的安装各种软件。最近偷懒想用brew安装下mysql。不料安装完成后遇到了启动不了的情况。错误日志记录如下：  </p>
+<p><notextile><blockquote><p>130227  9:46:12 [Warning] Setting lower_case_table_names=2 because file system for /usr/local/var/mysql/ is case insensitive<br>/usr/local/Cellar/mysql/5.5.28/bin/mysqld: Can&#39;t find file: &#39;./mysql/plugin.frm&#39; (errno: 13)<br>130227  9:46:12 [ERROR] Can&#39;t open the mysql.plugin table. Please run mysql_upgrade to create it.<br>130227  9:46:12 InnoDB: The InnoDB memory heap is disabled<br>130227  9:46:12 InnoDB: Mutexes and rw_locks use GCC atomic builtins<br>130227  9:46:12 InnoDB: Compressed tables use zlib 1.2.5<br>130227  9:46:12 InnoDB: Initializing buffer pool, size = 128.0M<br>130227  9:46:12 InnoDB: Completed initialization of buffer pool<br>130227  9:46:12  InnoDB: Operating system error number 13 in a file operation.<br><strong>InnoDB: The error means mysqld does not have the access rights to</strong><br>InnoDB: the directory.<br>InnoDB: File name ./ibdata1<br>InnoDB: File operation call: &#39;create&#39;.<br>InnoDB: Cannot continue operation.<br>130227 09:46:12 mysqld_safe mysqld from pid file /usr/local/var/mysql/soonemac.local.pid ended  </p></p>
+<p><footer></footer></blockquote></notextile>
+标粗那行表明有权限问题，进去看了下发现错误日志的用户是属于mysql的，其他的所有mysql相关文件的都是属于soone用户的。于是我干脆就把mysql相关的文件的权限改成了777，再次启动mysql，这回就正常了。<br>ps:理论上把跟mysql相关的文件和目录所属用户改成mysql应该也是能解决这个问题。</p>
 
       
     </div>
     <footer>
       
         
+        
+  
+  <div class="tags">
+    <a href="/tags/mac/">mac</a>, <a href="/tags/mysql/">mysql</a>, <a href="/tags/brew/">brew</a>
+  </div>
+
         
       
       <div class="clearfix"></div>
@@ -86,13 +83,12 @@
 </article>
 
 
-  
-
-  <nav id="pagination">
-  
-  
-  <div class="clearfix"></div>
-</nav>
+<section id="comment">
+  <h1 class="title">Comments</h1>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
 </div></div>
     <aside id="sidebar" class="alignright">
 <div class="search">
@@ -195,7 +191,7 @@ var disqus_shortname = 'thelastdaydotme';
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
   dsq.async = true;
-  dsq.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
