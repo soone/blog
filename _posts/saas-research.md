@@ -2,7 +2,6 @@ title: saas架构初研究
 date: 2013-02-16 14:44:26
 tags:
 - saas
-- tech
 categories:
 - tech
 ---
