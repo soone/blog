@@ -3,7 +3,7 @@
   <title><![CDATA[soone的碎碎念]]></title>
   <link href="http://thelastday.me/atom.xml" rel="self"/>
   <link href="http://thelastday.me"/>
-  <updated>2013-03-17T10:38:03.776Z</updated>
+  <updated>2013-03-17T10:40:13.516Z</updated>
   <id>http://thelastday.me/</id>
   <author>
     <name><![CDATA[soone]]></name>
@@ -58,7 +58,7 @@
     <link href="http://thelastday.me/2013/02/20/python-blinker-introduct/"/>
     <id>http://thelastday.me/2013/02/20/python-blinker-introduct/</id>
     <published>2013-02-20T14:05:22.000Z</published>
-    <updated>2013-02-20T16:27:44.000Z</updated>
+    <updated>2013-03-17T10:39:51.000Z</updated>
     <content type="html"><![CDATA[<p>本文纯粹翻译自<a href="http://discorporate.us/projects/Blinker">blinker</a>官网的1.1版本的<a href="http://discorporate.us/projects/Blinker/docs/1.1/signals.html">documentation</a><br>首先介绍下blinker模块的作用： blinker为python对象提供快速、简单的object-to-object和信号广播功能。  </p>
 <p>blinker的核心虽然很小但却提供了强大的功能：  </p>
 <ul>
@@ -117,7 +117,7 @@
     <link href="http://thelastday.me/2013/02/18/what-does-functools.wraps-do/"/>
     <id>http://thelastday.me/2013/02/18/what-does-functools.wraps-do/</id>
     <published>2013-02-17T16:39:12.000Z</published>
-    <updated>2013-02-17T17:15:02.000Z</updated>
+    <updated>2013-03-17T10:40:04.000Z</updated>
     <content type="html"><![CDATA[<p>以前对functools.wraps总是没有好好的深入去了解，刚好看到stackoverflow上有这样一个<a href="http://stackoverflow.com/questions/308999/what-does-functools-wraps-do" title="what does functools.wraps do?">帖子</a>在解释，就翻译过来，当作笔记记录。  </p>
 <h2>问题：</h2>
 <p>在本站的另一个问题的评论里，有一些网友在说他们不确定functools.wraps是用来做什么的，于是我就单独在网站上问一下这个问题，这样在stackoverflower上就有对functools.wraps特性的一个记录了。  </p>
