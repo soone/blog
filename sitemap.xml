@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://thelastday.me/2013/03/17/about-python-decorator/</loc>
+    <lastmod>2013-03-17T10:37:58.000Z</lastmod>
+  </url>
+  <url>
     <loc>http://thelastday.me/2013/03/02/vim-tips-to-share-1/</loc>
     <lastmod>2013-03-02T09:36:35.000Z</lastmod>
   </url>

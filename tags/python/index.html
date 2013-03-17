@@ -51,6 +51,42 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2013-03-17T09:54:54.000Z"><a href="/2013/03/17/about-python-decorator/">Mar 17 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/03/17/about-python-decorator/">关于python的装饰器</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>python提供的装饰器是个很优雅的语法，不过这里面的理解也让我花了比较多的时间，python的装饰器其实有多种方式，google出来的文章比较多的是介绍函数装饰器，以及python内置的classmethod，staticmethod和property这些秀时期。<br>关于python的函数装饰器和内置装饰器可以参考一下几个我google出来的文章：<br>1. <a href="http://blog.csdn.net/thy38/article/details/4471421" title="Python装饰器学习">Python装饰器学习</a><br>2. <a href="http://www.cnblogs.com/huxi/archive/2011/03/01/1967600.html" title="Python装饰器与面向切面编程">Python装饰器与面向切面编程</a><br>3. <a href="http://www.codecho.com/understanding-python-decorators/" title="理解Python中的装饰器">理解Python中的装饰器</a><br>4. <a href="http://www.vimer.cn/2011/04/python装饰器的一个妙用.html" title="python装饰器的一个妙用">python装饰器的一个妙用</a><br>下面重点描述下我对类装饰器的理解，先看看下面的例子：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div><div class="line-number">15</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DecoClass</span>:</span></div><br><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, func)</span>:</span></div><div class="line">        <span class="keyword">print</span> <span class="string">"deco init"</span></div><div class="line">        self.func = func</div><br><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">print</span> <span class="string">"deco be called"</span></div><div class="line">        <span class="keyword">return</span> self.func() + <span class="number">10</span></div><br><div class="line"><span class="decorator">@DecoClass</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">testA</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">return</span> <span class="number">10</span></div><br><div class="line"><span class="keyword">print</span> testA()</div></code></pre></td></tr></table></figure>
+上面的代码会得到下面的结果
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="title">deco</span> init</div><div class="line"><span class="title">deco</span> be called</div><div class="line"><span class="number">20</span></div></code></pre></td></tr></table></figure>
+类修饰器绑定的函数在调用时，会生成一个类的实例，这时候就调用__init__打印出了&quot;deco init&quot;，接着这个类实例会被调用，即调用了__call__方法，这时候打印出了&quot;deco be called&quot;，同时testA()返回的10加上10得到20的结果。它等同于:
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="title">print</span> DecoClass(testA)()</div></code></pre></td></tr></table></figure>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2013-02-20T14:05:22.000Z"><a href="/2013/02/20/python-blinker-introduct/">Feb 20 2013</a></time>
       
       
@@ -217,6 +253,8 @@ f这个函数被with_logging函数替换掉了。很不幸的，这样就意味�
   
     <li><a href="/tags/brew/">brew</a><small>1</small></li>
   
+    <li><a href="/tags/decorator/">decorator</a><small>1</small></li>
+  
     <li><a href="/tags/emerge/">emerge</a><small>1</small></li>
   
     <li><a href="/tags/functools/">functools</a><small>1</small></li>
@@ -237,7 +275,7 @@ f这个函数被with_logging函数替换掉了。很不幸的，这样就意味�
   
     <li><a href="/tags/npm/">npm</a><small>1</small></li>
   
-    <li><a href="/tags/python/">python</a><small>2</small></li>
+    <li><a href="/tags/python/">python</a><small>3</small></li>
   
     <li><a href="/tags/saas/">saas</a><small>1</small></li>
   
