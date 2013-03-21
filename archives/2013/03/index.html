@@ -51,6 +51,41 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2013-03-21T06:52:55.000Z"><a href="/2013/03/21/ssl-cert-create-info-match/">Mar 21 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/03/21/ssl-cert-create-info-match/">ssl证书生成信息匹配问题</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>今天财务说她内网老服务器的ssl证书过期了无法登陆window服务器了。过期后重新生成证书是必须的。不过发现我没老服务器的根证书，幸亏今天zj来了(我们的老员工)，否则就杯具了。。<br>拿到证书后开始在fedora上做几个简单步骤的证书生成：</p>
+<p><figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div><div class="line-number">15</div></code></pre></td><td class="code"><pre><code><div class="line">openssl genrsa -des3 -<span class="keyword">out</span> liny<span class="preprocessor">.key</span> <span class="number">2048</span>  </div><div class="line">openssl rsa -<span class="keyword">in</span> liny<span class="preprocessor">.key</span> -<span class="keyword">out</span> liny<span class="preprocessor">.key</span>  </div><div class="line">openssl req -new -key liny<span class="preprocessor">.key</span> -<span class="keyword">out</span> liny<span class="preprocessor">.csr</span>  </div><div class="line"><span class="preprocessor"># 注意下面这个语句，如果你的openssl.cnf是用的默认的，那可能是在  </span></div><div class="line"><span class="preprocessor"># /etc/pki/tls/下面，里面默认配置的相应目录是在/etc/pki/CA目录下，  </span></div><div class="line"><span class="preprocessor"># 这里面会要求在CA下有个index.txt和serial的文件，如果不存在请手动  </span></div><div class="line"><span class="preprocessor"># 创建，同时在index.txt里面写入7C，这是拍脑袋的文字，随便写  </span></div><div class="line">sudo openssl ca -<span class="keyword">in</span> liny<span class="preprocessor">.csr</span> -<span class="keyword">out</span> liny<span class="preprocessor">.crt</span> -cert kfs<span class="preprocessor">.crt</span> -keyfile kfs<span class="preprocessor">.key</span>  </div><div class="line"><span class="preprocessor"># 上面的这个命令执行的时候总是出现这样的提示：</span></div><div class="line"><span class="preprocessor"># Using configuration from /etc/pki/tls/openssl.cnf  </span></div><div class="line"><span class="preprocessor"># Check that the request matches the signature  </span></div><div class="line"><span class="preprocessor"># Signature ok  </span></div><div class="line"><span class="preprocessor"># The stateOrProvinceName field needed to be the same in the  </span></div><div class="line"><span class="preprocessor"># CA certificate (Fujian) and the request (Fujian)  </span></div><div class="line"><span class="preprocessor"># 明显我填的身份是对的，可是这里总是提示是错误的。</span></div></code></pre></td></tr></table></figure>
+这个纠结的问题后来在stackoverflow上找到了答案，需要修改openssl.cnf里面的string_mask的值，将<strong>utf8only</strong>修改成<strong>pkix</strong>即可。  </p>
+<p>参考地址：<a href="http://stackoverflow.com/questions/6976127/openssl-signing-a-certificate-with-my-ca">http://stackoverflow.com/questions/6976127/openssl-signing-a-certificate-with-my-ca</a></p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2013-03-17T09:54:54.000Z"><a href="/2013/03/17/about-python-decorator/">Mar 17 2013</a></time>
       
       
@@ -180,7 +215,7 @@
   
     <li><a href="/categories/python/">python</a><small>2</small></li>
   
-    <li><a href="/categories/tech/">tech</a><small>4</small></li>
+    <li><a href="/categories/tech/">tech</a><small>5</small></li>
   
   </ul>
 </div>
@@ -221,6 +256,8 @@
     <li><a href="/tags/python/">python</a><small>3</small></li>
   
     <li><a href="/tags/saas/">saas</a><small>1</small></li>
+  
+    <li><a href="/tags/ssl/">ssl</a><small>1</small></li>
   
     <li><a href="/tags/tilda/">tilda</a><small>1</small></li>
   

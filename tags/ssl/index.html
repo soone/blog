@@ -3,32 +3,13 @@
 <head>
   <meta charset="utf-8">
   
-  <title>tools | soone的碎碎念</title>
+  <title>ssl | soone的碎碎念</title>
   <meta name="author" content="soone">
-  
-  <meta name="description" content="common
-minus
-markdown
-octopress
-
-
-machine learn
-scikit-learn
-milk
-mrjob
-
-
-study
-coursera
-python-blinker
-python-blinker2
-python-inner-function
-python-i">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="tools"/>
+  
   <meta property="og:site_name" content="soone的碎碎念"/>
 
   <link href="/favicon.png" rel="icon">
@@ -59,59 +40,36 @@ python-i">
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
 
-<article class="page">
+
+<h2 class="archive-title tag">ssl</h2>
+
+
+  
+    <article class="post">
   
   <div class="post-content">
     <header>
       
+        <div class="icon"></div>
+        <time datetime="2013-03-21T06:52:55.000Z"><a href="/2013/03/21/ssl-cert-create-info-match/">Mar 21 2013</a></time>
+      
       
   
-    <h1 class="title">tools</h1>
+    <h1 class="title"><a href="/2013/03/21/ssl-cert-create-info-match/">ssl证书生成信息匹配问题</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <ol>
-<li>common<ul>
-<li><a href="http://minus.com" title="类似花瓣的东西">minus</a></li>
-<li><a href="http://wowubuntu.com/markdown/" title="markdown">markdown</a></li>
-<li><a href="http://octopress.org/" title="octopress">octopress</a></li>
-</ul>
-</li>
-<li>machine learn<ul>
-<li><a href="http://scikit-learn.org/stable/" title="scikit-learn">scikit-learn</a></li>
-<li><a href="https://github.com/luispedro/milk" title="milk">milk</a></li>
-<li><a href="https://github.com/Yelp/mrjob" title="mrjob">mrjob</a></li>
-</ul>
-</li>
-<li>study<ul>
-<li><a href="https://www.coursera.org/" title="coursera">coursera</a></li>
-<li><a href="http://daqinbuyi.iteye.com/blog/1166226" title="blinker消息分发组件">python-blinker</a></li>
-<li><a href="http://blackgu.blogbus.com/logs/172223779.html" title="blinker消息分发组件">python-blinker2</a></li>
-<li><a href="http://www.189works.com/article-90355-1.html" title="python内建函数">python-inner-function</a></li>
-<li><a href="http://blog.csdn.net/jgood/article/details/4371991" title="python内建函数">python-inner-function</a></li>
-<li><a href="http://www.cnblogs.com/huxi/archive/2011/03/01/1967600.html" title="Python装饰器与面向切面编程">python装饰器</a></li>
-<li><a href="http://www.keakon.net/2009/04/12/Python%E7%9A%84functools%E6%A8%A1%E5%9D%97" title="Python的functools模块">python-functools</a></li>
-<li><a href="http://blog.csdn.net/killua_hzl/article/details/5580661" title="python-int">python-int</a></li>
-<li><a href="http://bbs.pythonid.com/viewthread.php?tid=187" title="python-all-any">python-all-any</a></li>
-<li><a href="http://pythonquirks.blogspot.jp/2010/07/absolutely-relative-import.html" title="python绝对引入">python绝对引入</a></li>
-<li><a href="http://effbot.org/zone/python-with-statement.htm" title="python-with">python-with</a></li>
-<li><a href="http://feilong.me/2011/02/learning-python-follow-felinx-part-one" title="python兼容性编程">python兼容性编程</a></li>
-<li><a href="http://www.lesscss.net/" title="less">less</a></li>
-</ul>
-</li>
-<li>raspberry pi<ul>
-<li><a href="http://www.shumeipai.net/thread-902-1-1.html" title="GPIO Install">GPIO Install</a></li>
-</ul>
-</li>
-</ol>
+        <p>今天财务说她内网老服务器的ssl证书过期了无法登陆window服务器了。过期后重新生成证书是必须的。不过发现我没老服务器的根证书，幸亏今天zj来了(我们的老员工)，否则就杯具了。。<br>拿到证书后开始在fedora上做几个简单步骤的证书生成：</p>
+<p><figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div><div class="line-number">15</div></code></pre></td><td class="code"><pre><code><div class="line">openssl genrsa -des3 -<span class="keyword">out</span> liny<span class="preprocessor">.key</span> <span class="number">2048</span>  </div><div class="line">openssl rsa -<span class="keyword">in</span> liny<span class="preprocessor">.key</span> -<span class="keyword">out</span> liny<span class="preprocessor">.key</span>  </div><div class="line">openssl req -new -key liny<span class="preprocessor">.key</span> -<span class="keyword">out</span> liny<span class="preprocessor">.csr</span>  </div><div class="line"><span class="preprocessor"># 注意下面这个语句，如果你的openssl.cnf是用的默认的，那可能是在  </span></div><div class="line"><span class="preprocessor"># /etc/pki/tls/下面，里面默认配置的相应目录是在/etc/pki/CA目录下，  </span></div><div class="line"><span class="preprocessor"># 这里面会要求在CA下有个index.txt和serial的文件，如果不存在请手动  </span></div><div class="line"><span class="preprocessor"># 创建，同时在index.txt里面写入7C，这是拍脑袋的文字，随便写  </span></div><div class="line">sudo openssl ca -<span class="keyword">in</span> liny<span class="preprocessor">.csr</span> -<span class="keyword">out</span> liny<span class="preprocessor">.crt</span> -cert kfs<span class="preprocessor">.crt</span> -keyfile kfs<span class="preprocessor">.key</span>  </div><div class="line"><span class="preprocessor"># 上面的这个命令执行的时候总是出现这样的提示：</span></div><div class="line"><span class="preprocessor"># Using configuration from /etc/pki/tls/openssl.cnf  </span></div><div class="line"><span class="preprocessor"># Check that the request matches the signature  </span></div><div class="line"><span class="preprocessor"># Signature ok  </span></div><div class="line"><span class="preprocessor"># The stateOrProvinceName field needed to be the same in the  </span></div><div class="line"><span class="preprocessor"># CA certificate (Fujian) and the request (Fujian)  </span></div><div class="line"><span class="preprocessor"># 明显我填的身份是对的，可是这里总是提示是错误的。</span></div></code></pre></td></tr></table></figure>
+这个纠结的问题后来在stackoverflow上找到了答案，需要修改openssl.cnf里面的string_mask的值，将<strong>utf8only</strong>修改成<strong>pkix</strong>即可。  </p>
+<p>参考地址：<a href="http://stackoverflow.com/questions/6976127/openssl-signing-a-certificate-with-my-ca">http://stackoverflow.com/questions/6976127/openssl-signing-a-certificate-with-my-ca</a></p>
 
       
     </div>
     <footer>
       
-        
         
         
       
@@ -120,6 +78,14 @@ python-i">
   </div>
 </article>
 
+
+  
+
+  <nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav>
 </div></div>
     <aside id="sidebar" class="alignright">
 <div class="search">

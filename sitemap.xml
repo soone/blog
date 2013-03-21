@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://thelastday.me/2013/03/21/ssl-cert-create-info-match/</loc>
+    <lastmod>2013-03-21T07:46:44.000Z</lastmod>
+  </url>
+  <url>
     <loc>http://thelastday.me/2013/02/18/what-does-functools.wraps-do/</loc>
     <lastmod>2013-03-17T10:40:04.000Z</lastmod>
   </url>

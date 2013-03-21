@@ -3,13 +3,26 @@
   <title><![CDATA[soone的碎碎念]]></title>
   <link href="http://thelastday.me/atom.xml" rel="self"/>
   <link href="http://thelastday.me"/>
-  <updated>2013-03-17T10:40:13.516Z</updated>
+  <updated>2013-03-21T07:47:03.022Z</updated>
   <id>http://thelastday.me/</id>
   <author>
     <name><![CDATA[soone]]></name>
     <email><![CDATA[fengyue15@gmail.com]]></email>
   </author>
   <generator uri="http://zespia.tw/hexo">Hexo</generator>
+  <entry>
+    <title type="html"><![CDATA[ssl证书生成信息匹配问题]]></title>
+    <link href="http://thelastday.me/2013/03/21/ssl-cert-create-info-match/"/>
+    <id>http://thelastday.me/2013/03/21/ssl-cert-create-info-match/</id>
+    <published>2013-03-21T06:52:55.000Z</published>
+    <updated>2013-03-21T07:46:44.000Z</updated>
+    <content type="html"><![CDATA[<p>今天财务说她内网老服务器的ssl证书过期了无法登陆window服务器了。过期后重新生成证书是必须的。不过发现我没老服务器的根证书，幸亏今天zj来了(我们的老员工)，否则就杯具了。。<br>拿到证书后开始在fedora上做几个简单步骤的证书生成：</p>
+<p><figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div><div class="line-number">15</div></code></pre></td><td class="code"><pre><code><div class="line">openssl genrsa -des3 -<span class="keyword">out</span> liny<span class="preprocessor">.key</span> <span class="number">2048</span>  </div><div class="line">openssl rsa -<span class="keyword">in</span> liny<span class="preprocessor">.key</span> -<span class="keyword">out</span> liny<span class="preprocessor">.key</span>  </div><div class="line">openssl req -new -key liny<span class="preprocessor">.key</span> -<span class="keyword">out</span> liny<span class="preprocessor">.csr</span>  </div><div class="line"><span class="preprocessor"># 注意下面这个语句，如果你的openssl.cnf是用的默认的，那可能是在  </span></div><div class="line"><span class="preprocessor"># /etc/pki/tls/下面，里面默认配置的相应目录是在/etc/pki/CA目录下，  </span></div><div class="line"><span class="preprocessor"># 这里面会要求在CA下有个index.txt和serial的文件，如果不存在请手动  </span></div><div class="line"><span class="preprocessor"># 创建，同时在index.txt里面写入7C，这是拍脑袋的文字，随便写  </span></div><div class="line">sudo openssl ca -<span class="keyword">in</span> liny<span class="preprocessor">.csr</span> -<span class="keyword">out</span> liny<span class="preprocessor">.crt</span> -cert kfs<span class="preprocessor">.crt</span> -keyfile kfs<span class="preprocessor">.key</span>  </div><div class="line"><span class="preprocessor"># 上面的这个命令执行的时候总是出现这样的提示：</span></div><div class="line"><span class="preprocessor"># Using configuration from /etc/pki/tls/openssl.cnf  </span></div><div class="line"><span class="preprocessor"># Check that the request matches the signature  </span></div><div class="line"><span class="preprocessor"># Signature ok  </span></div><div class="line"><span class="preprocessor"># The stateOrProvinceName field needed to be the same in the  </span></div><div class="line"><span class="preprocessor"># CA certificate (Fujian) and the request (Fujian)  </span></div><div class="line"><span class="preprocessor"># 明显我填的身份是对的，可是这里总是提示是错误的。</span></div></code></pre></td></tr></table></figure>
+这个纠结的问题后来在stackoverflow上找到了答案，需要修改openssl.cnf里面的string_mask的值，将<strong>utf8only</strong>修改成<strong>pkix</strong>即可。  </p>
+<p>参考地址：<a href="http://stackoverflow.com/questions/6976127/openssl-signing-a-certificate-with-my-ca">http://stackoverflow.com/questions/6976127/openssl-signing-a-certificate-with-my-ca</a></p>
+]]></content>
+    <category scheme="http://thelastday.me/tags/ssl/" term="ssl"/>
+  </entry>
   <entry>
     <title type="html"><![CDATA[关于python的装饰器]]></title>
     <link href="http://thelastday.me/2013/03/17/about-python-decorator/"/>
