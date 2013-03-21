@@ -5,7 +5,7 @@ tags:
 - blinker
 categories:
 - python
-- programming
+- tech
 ---
 本文纯粹翻译自[blinker](http://discorporate.us/projects/Blinker)官网的1.1版本的[documentation](http://discorporate.us/projects/Blinker/docs/1.1/signals.html)  
 首先介绍下blinker模块的作用： blinker为python对象提供快速、简单的object-to-object和信号广播功能。  

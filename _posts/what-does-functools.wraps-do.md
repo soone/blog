@@ -5,7 +5,7 @@ tags:
 - functools
 categories:
 - python
-- programming
+- tech
 ---
 以前对functools.wraps总是没有好好的深入去了解，刚好看到stackoverflow上有这样一个[帖子](http://stackoverflow.com/questions/308999/what-does-functools-wraps-do "what does functools.wraps do?")在解释，就翻译过来，当作笔记记录。  
 ## 问题：  
